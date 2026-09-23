@@ -1,0 +1,15 @@
+# Never ship these into an image.
+.git
+.gitignore
+.env
+.env.*
+**/__pycache__
+**/*.pyc
+data/
+logs/
+.venv/
+venv/
+.vscode/
+.idea/
+docs/*.docx
+*.log
