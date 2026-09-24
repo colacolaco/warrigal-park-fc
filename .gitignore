@@ -1,0 +1,39 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- Application runtime data ----
+data/*.db
+data/*.sqlite3
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+logs/
+
+# ---- Environment configuration (machine specific, must never be committed) ----
+.env
+.env.*
+!.env.example
+config/.env
+config/.env.*
+!config/env.example
+
+# ---- Editors and operating systems ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- Test and coverage output ----
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ---- Deployment ----
+deploy/out/
+deploy/*.log

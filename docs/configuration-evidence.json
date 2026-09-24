@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-10-03T08:38:26.466153+00:00",
+  "python": "3.13.1",
+  "platform": "Windows",
+  "environments": [
+    {
+      "environment": "development",
+      "host": "127.0.0.1",
+      "port": 5000,
+      "database": "warrigal_park.db",
+      "seeding": true,
+      "debug": false
+    },
+    {
+      "environment": "test",
+      "host": "127.0.0.1",
+      "port": 5000,
+      "database": "warrigal_park.db",
+      "seeding": true,
+      "debug": false
+    },
+    {
+      "environment": "production",
+      "host": "127.0.0.1",
+      "port": 5000,
+      "database": "warrigal_park.db",
+      "seeding": false,
+      "debug": false
+    }
+  ],
+  "version_controlled_configuration": {
+    "gitignore_env_rules": [
+      ".env",
+      ".env.*"
+    ],
+    "tracked_config": [
+      "<git ls-files config failed: fatal: not a git repository (or any of the parent directories): .git>"
+    ]
+  },
+  "schema": {
+    "schema_version": "1.2.0",
+    "migrations": [
+      "1.1.0",
+      "1.2.0"
+    ]
+  },
+  "history": {
+    "log": "<git log --oneline --graph --decorate --all -25 failed: fatal: not a git repository (or any of the parent directories): .git>",
+    "branches": [
+      "<git branch -a --format=%(refname:short) failed: fatal: not a git repository (or any of the parent directories): .git>"
+    ],
+    "tags": [
+      "<git tag --list failed: fatal: not a git repository (or any of the parent directories): .git>"
+    ]
+  },
+  "audit": {
+    "audit_entries": 9
+  }
+}

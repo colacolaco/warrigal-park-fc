@@ -1,0 +1,40 @@
+[Unit]
+Description=Warrigal Park FC Member Registration and Team Roster System
+Documentation=file:///opt/warrigal-park-fc/docs/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=warrigal
+Group=warrigal
+WorkingDirectory=/opt/warrigal-park-fc
+
+# Configuration is supplied here, not in a committed file.  A real secret is
+# injected by the host; see docs/DEPLOYMENT.md section 3.
+Environment=APP_ENV=production
+Environment=APP_HOST=0.0.0.0
+Environment=APP_PORT=8080
+Environment=APP_DB_PATH=/var/lib/warrigal-park/warrigal_park.db
+Environment=APP_SEED=false
+Environment=APP_DEBUG=false
+EnvironmentFile=-/etc/warrigal-park/secrets.env
+
+ExecStart=/usr/bin/python3 /opt/warrigal-park-fc/wsgi.py
+
+Restart=on-failure
+RestartSec=5
+
+# The application only needs to write to its data directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/warrigal-park
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=warrigal-park
+
+[Install]
+WantedBy=multi-user.target
