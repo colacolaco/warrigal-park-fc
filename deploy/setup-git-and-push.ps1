@@ -51,41 +51,58 @@ if (Test-Path (Join-Path $RepoRoot '.git')) {
 
 # -- 1b. reachability --------------------------------------------------------
 # On some networks the DNS answer for github.com points at an address that is
-# blocked, and the push then fails with "Could not connect to server" even
-# though the browser reaches GitHub normally.  If that happens, a reachable
-# GitHub address is pinned for THIS REPOSITORY ONLY via http.curloptResolve.
-# Nothing outside the repository is changed.
+# blocked, so the push fails with a connection timeout even though a browser
+# reaches GitHub normally. Which addresses respond also changes between
+# sessions. This step therefore tests the real git connection, and if it fails
+# it tries each known GitHub address until one works, pinning it for THIS
+# REPOSITORY ONLY via http.curloptResolve. Nothing outside the repository is
+# changed. A plain TCP probe is not used, because an address can accept a raw
+# TCP connection and still not carry a git HTTPS session.
 Write-Step '1b' 'Checking that git can reach github.com'
-$ErrorActionPreference = 'Continue'
-git ls-remote --exit-code --heads origin *> $null
-$reachable = ($LASTEXITCODE -eq 0)
-$ErrorActionPreference = 'Stop'
 
-if ($reachable) {
+function Test-GitRemote {
+    param([string]$Address)
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    if ($Address) {
+        git -c "http.curloptResolve=github.com:443:$Address" -c http.version=HTTP/1.1 `
+            ls-remote --heads origin *> $null
+    } else {
+        git ls-remote --heads origin *> $null
+    }
+    $ok = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = $previous
+    return $ok
+}
+
+if (Test-GitRemote -Address '') {
     Write-Host '      github.com is reachable from git' -ForegroundColor DarkGray
+    git config --unset http.curloptResolve 2>$null
 } else {
-    Write-Host '      github.com is NOT reachable from git; trying known addresses' -ForegroundColor Yellow
-    $candidates = @('140.82.112.3', '140.82.113.3', '140.82.114.3', '140.82.121.3', '20.27.177.113')
+    Write-Host '      github.com is not reachable by its normal address' -ForegroundColor Yellow
+    $candidates = @(
+        '140.82.113.3', '140.82.112.3', '140.82.114.3', '140.82.116.3',
+        '20.27.177.113', '20.200.245.247', '20.233.83.145', '4.237.22.38',
+        '20.26.156.215'
+    )
     $fixed = $null
     foreach ($ip in $candidates) {
-        $client = New-Object System.Net.Sockets.TcpClient
-        try {
-            $task = $client.ConnectAsync($ip, 443)
-            if ($task.Wait(3000) -and $client.Connected) { $fixed = $ip }
-        } catch { }
-        finally { $client.Close() }
-        if ($fixed) { break }
+        Write-Host "      trying $ip ..." -ForegroundColor DarkGray
+        if (Test-GitRemote -Address $ip) { $fixed = $ip; break }
     }
     if (-not $fixed) {
         throw @'
-git cannot reach github.com and none of the known GitHub addresses responded.
-Check your internet connection (and any VPN), then run this script again.
+git cannot reach github.com on any known address.
+
+Check your internet connection and any VPN, then run this script again. If the
+browser can open https://github.com but this still fails, the network is
+blocking git specifically; try a different network.
 '@
     }
     git config http.curloptResolve "github.com:443:$fixed"
     git config http.version HTTP/1.1
-    Write-Host "      pinned github.com -> $fixed for this repository only" -ForegroundColor Yellow
-    Write-Host '      (this changes nothing outside the repository)' -ForegroundColor DarkGray
+    Write-Host "      using github.com -> $fixed for this repository only" -ForegroundColor Yellow
+    Write-Host '      (nothing outside the repository is changed)' -ForegroundColor DarkGray
 }
 
 # -- 2. identity -------------------------------------------------------------
@@ -169,23 +186,44 @@ Write-Host '      paste a Personal Access Token, not your GitHub password.' -For
 Write-Host '      Create one at https://github.com/settings/tokens (scope: repo).' -ForegroundColor Yellow
 Write-Host ''
 
+# A push is retried a few times: the connection to GitHub can fail once and
+# succeed on the next attempt, which is not a fault the user can act on.
+function Invoke-Push {
+    param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Arguments)
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
+        $previous = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        git push @Arguments 2>&1 | ForEach-Object { Write-Host "        $_" -ForegroundColor DarkGray }
+        $code = $LASTEXITCODE
+        $ErrorActionPreference = $previous
+        if ($code -eq 0) { return $true }
+        if ($attempt -lt 3) {
+            Write-Host "      attempt $attempt failed; retrying in 5 seconds ..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 5
+        }
+    }
+    return $false
+}
+
 Write-Host '      pushing main ...' -ForegroundColor DarkGray
-git push -u origin main
-if ($LASTEXITCODE -ne 0) {
+if (-not (Invoke-Push -Arguments @('-u', 'origin', 'main'))) {
     throw @'
-The push of main failed. The most common causes are:
+The push of main failed after three attempts. The most common causes are:
+
   * the GitHub repository is not empty (it must be created with NO README,
     no .gitignore and no licence), or
-  * authentication failed.
+  * authentication failed, or
+  * the network is blocking git but not the browser.
+
 Fix the cause and run this script again; it will pick up where it stopped.
 '@
 }
 
 Write-Host '      pushing all branches ...' -ForegroundColor DarkGray
-git push origin --all
+Invoke-Push -Arguments @('origin', '--all') | Out-Null
 
 Write-Host '      pushing tags ...' -ForegroundColor DarkGray
-git push origin --tags
+Invoke-Push -Arguments @('origin', '--tags') | Out-Null
 
 # -- 8. summary --------------------------------------------------------------
 Write-Host ''
