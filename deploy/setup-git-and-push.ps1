@@ -49,6 +49,45 @@ if (Test-Path (Join-Path $RepoRoot '.git')) {
     Write-Host '      created' -ForegroundColor DarkGray
 }
 
+# -- 1b. reachability --------------------------------------------------------
+# On some networks the DNS answer for github.com points at an address that is
+# blocked, and the push then fails with "Could not connect to server" even
+# though the browser reaches GitHub normally.  If that happens, a reachable
+# GitHub address is pinned for THIS REPOSITORY ONLY via http.curloptResolve.
+# Nothing outside the repository is changed.
+Write-Step '1b' 'Checking that git can reach github.com'
+$ErrorActionPreference = 'Continue'
+git ls-remote --exit-code --heads origin *> $null
+$reachable = ($LASTEXITCODE -eq 0)
+$ErrorActionPreference = 'Stop'
+
+if ($reachable) {
+    Write-Host '      github.com is reachable from git' -ForegroundColor DarkGray
+} else {
+    Write-Host '      github.com is NOT reachable from git; trying known addresses' -ForegroundColor Yellow
+    $candidates = @('140.82.112.3', '140.82.113.3', '140.82.114.3', '140.82.121.3', '20.27.177.113')
+    $fixed = $null
+    foreach ($ip in $candidates) {
+        $client = New-Object System.Net.Sockets.TcpClient
+        try {
+            $task = $client.ConnectAsync($ip, 443)
+            if ($task.Wait(3000) -and $client.Connected) { $fixed = $ip }
+        } catch { }
+        finally { $client.Close() }
+        if ($fixed) { break }
+    }
+    if (-not $fixed) {
+        throw @'
+git cannot reach github.com and none of the known GitHub addresses responded.
+Check your internet connection (and any VPN), then run this script again.
+'@
+    }
+    git config http.curloptResolve "github.com:443:$fixed"
+    git config http.version HTTP/1.1
+    Write-Host "      pinned github.com -> $fixed for this repository only" -ForegroundColor Yellow
+    Write-Host '      (this changes nothing outside the repository)' -ForegroundColor DarkGray
+}
+
 # -- 2. identity -------------------------------------------------------------
 Write-Step 2 'Setting the commit identity'
 $name = git config user.name
