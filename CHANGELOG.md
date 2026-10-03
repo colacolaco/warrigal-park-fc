@@ -10,6 +10,11 @@ find the corresponding merge commit.
 
 ## [Unreleased]
 
+### Fixed
+- `README.md`: repaired non-ASCII characters (the em dashes and the directory-tree
+  diagram) that a text-editor roundtrip had corrupted. The file was rewritten as
+  UTF-8 and the damaged characters restored.
+
 ### Added
 - `docs/DEPLOYMENT.md`: configuration and deployment guide.
 
