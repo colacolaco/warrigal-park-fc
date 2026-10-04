@@ -61,8 +61,17 @@ def run_git(*args: str) -> str:
     return result.stdout.rstrip()
 
 
+def summarise(settings) -> str:
+    """A one-line summary that does not embed the machine's absolute paths."""
+    return (
+        f"env={settings.env} host={settings.host} port={settings.port} "
+        f"db={settings.db_path.name} seed={settings.seed} debug={settings.debug} "
+        f"source={settings.source}"
+    )
+
+
 def section_1_configuration() -> dict[str, object]:
-    heading("1. Externalised configuration — one codebase, three environments")
+    heading("1. Externalised configuration - one codebase, three environments")
     table = []
     for environment in ("development", "test", "production"):
         settings = get_settings(
@@ -80,17 +89,17 @@ def section_1_configuration() -> dict[str, object]:
                 "debug": settings.debug,
             }
         )
-        print(f"  APP_ENV={environment:<12} -> {settings.describe()}")
+        print(f"  APP_ENV={environment:<12} -> {summarise(settings)}")
 
     defaults = get_settings(
         env_file=Path(tempfile.gettempdir()) / "warrigal-no-such-env"
     )
     print()
     print("  With no environment variables and no .env file the application still")
-    print(f"  starts on its defaults: {defaults.describe()}")
+    print(f"  starts on its defaults: {summarise(defaults)}")
 
     print()
-    print("  Known environments are validated — an unknown value stops start-up:")
+    print("  Known environments are validated - an unknown value stops start-up:")
     os.environ["APP_ENV"] = "staging"
     try:
         get_settings(env_file=Path(tempfile.gettempdir()) / "warrigal-no-such-env")
@@ -222,10 +231,13 @@ def section_5_audit_trail() -> dict[str, object]:
 
 def main() -> int:
     print("=" * 74)
-    print("  Warrigal Park FC — configuration management evidence")
+    print("  Warrigal Park FC - configuration management evidence")
     print(f"  generated {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
     print(f"  python   {platform.python_version()} on {platform.system()}")
-    print(f"  project  {PROJECT_ROOT}")
+    # Only the directory name is printed. The absolute path would embed the
+    # machine it happened to run on into the evidence, which is neither useful
+    # to a reader nor appropriate to publish.
+    print(f"  project  {PROJECT_ROOT.name}/ (repository root)")
     print("=" * 74)
 
     collected: dict[str, object] = {

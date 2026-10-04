@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T08:38:26.466153+00:00",
+  "generated_at": "2026-10-04T10:25:54.322569+00:00",
   "python": "3.13.1",
   "platform": "Windows",
   "environments": [
@@ -34,7 +34,10 @@
       ".env.*"
     ],
     "tracked_config": [
-      "<git ls-files config failed: fatal: not a git repository (or any of the parent directories): .git>"
+      "config/env.development",
+      "config/env.example",
+      "config/env.production",
+      "config/env.test"
     ]
   },
   "schema": {
@@ -45,12 +48,51 @@
     ]
   },
   "history": {
-    "log": "<git log --oneline --graph --decorate --all -25 failed: fatal: not a git repository (or any of the parent directories): .git>",
+    "log": "* 3a8c801 (HEAD -> main, origin/main, origin/HEAD) fix(views): repair the stylesheet and two escaping faults in the page layer\n* f5ac4bd config(deploy): make the push resilient to a blocked github.com address\n* ade4920 config(deploy): detect and work around an unreachable github.com\n*   16b691a Merge release/1.3.0: README character repair\n|\\  \n| *   e99d1e9 (origin/release/1.3.0, release/1.3.0) Merge feature/US-013-readme-encoding-repair into release/1.3.0\n| |\\  \n| | * ea18b02 (origin/feature/US-013-readme-encoding-repair, feature/US-013-readme-encoding-repair) fix(docs): repair characters damaged by a text editor roundtrip\n| |/  \n|/|   \n* | 6ebf147 (tag: v1.3.0) Merge release/1.3.0: teams, rosters, reporting views and deployment configuration\n|\\| \n| *   29f88f6 Merge feature/US-011-deployment-configuration into release/1.3.0\n| |\\  \n| | * 075ac6a (origin/feature/US-011-deployment-configuration, feature/US-011-deployment-configuration) docs: document deployment, rollback and the known limitations honestly\n| | * 66b6b28 config(deploy): add deploy scripts, a systemd unit, a Procfile and a Dockerfile\n| | * 976ad29 config(deploy): add environment files for development, test and production\n| |/  \n|/|   \n| *   38ebe1b Merge feature/US-010-reporting-views into release/1.3.0\n| |\\  \n| | * 195352b (origin/feature/US-010-reporting-views, feature/US-010-reporting-views) feat(views): add a JSON health endpoint reporting the schema version\n| | * 9a775ce feat(views): add the three reporting views the club asked for\n| |/  \n|/|   \n| *   df8ad56 Merge feature/US-009-team-and-roster into release/1.3.0\n| |\\  \n| | * 68d0d91 (origin/feature/US-009-team-and-roster, feature/US-009-team-and-roster) test(team): cover the roster rule, cross-season moves and contact gaps\n| | * 7f2256c feat(team): report roster contact gaps instead of hiding them\n| | * 557320a feat(team): show the guardian's contact for a junior on the roster\n| | * 1b83247 feat(team): place, move and remove players, with one guard on the roster\n| | * 8ecb4b0 feat(team): create a team for a season and list its roster\n| |/  \n|/|   \n| * 9265379 (origin/feature/US-012-change-log-and-evidence, feature/US-012-change-log-and-evidence) docs: rewrite the README around the five capabilities and the quick start\n| * 32458a2 docs: add a script that reproduces the configuration-management evidence\n| * ed129ec docs: add the change log\n|/  \n*   5adea07 (tag: v1.2.0) Merge release/1.2.0: season registration and the under-18 guardian rule\n|\\  \n| *   24bb054 (origin/release/1.2.0, release/1.2.0) Merge feature/US-007-registration-lifecycle into release/1.2.0\n| |\\",
     "branches": [
-      "<git branch -a --format=%(refname:short) failed: fatal: not a git repository (or any of the parent directories): .git>"
+      "feature/US-001-project-skeleton",
+      "feature/US-002-database-schema",
+      "feature/US-003-member-crud",
+      "feature/US-004-member-web-interface",
+      "feature/US-005-guardian-entity",
+      "feature/US-006-guardian-web-interface",
+      "feature/US-007-registration-lifecycle",
+      "feature/US-008-registration-reporting",
+      "feature/US-009-team-and-roster",
+      "feature/US-010-reporting-views",
+      "feature/US-011-deployment-configuration",
+      "feature/US-012-change-log-and-evidence",
+      "feature/US-013-readme-encoding-repair",
+      "main",
+      "release/1.0.0",
+      "release/1.1.0",
+      "release/1.2.0",
+      "release/1.3.0",
+      "origin",
+      "origin/feature/US-001-project-skeleton",
+      "origin/feature/US-002-database-schema",
+      "origin/feature/US-003-member-crud",
+      "origin/feature/US-004-member-web-interface",
+      "origin/feature/US-005-guardian-entity",
+      "origin/feature/US-006-guardian-web-interface",
+      "origin/feature/US-007-registration-lifecycle",
+      "origin/feature/US-008-registration-reporting",
+      "origin/feature/US-009-team-and-roster",
+      "origin/feature/US-010-reporting-views",
+      "origin/feature/US-011-deployment-configuration",
+      "origin/feature/US-012-change-log-and-evidence",
+      "origin/feature/US-013-readme-encoding-repair",
+      "origin/main",
+      "origin/release/1.0.0",
+      "origin/release/1.1.0",
+      "origin/release/1.2.0",
+      "origin/release/1.3.0"
     ],
     "tags": [
-      "<git tag --list failed: fatal: not a git repository (or any of the parent directories): .git>"
+      "v1.0.0",
+      "v1.1.0",
+      "v1.2.0",
+      "v1.3.0"
     ]
   },
   "audit": {
