@@ -1,0 +1,101 @@
+==========================================================================
+  Warrigal Park FC - Member Registration & Team Roster System
+  Automated test suite transcript
+==========================================================================
+  python  : 3.13.1
+  started : 2026-10-04 10:04:36 UTC
+  finished: 2026-10-04 10:04:38 UTC
+  tests   : 67 run, 0 failed, 0 errored, 0 skipped
+  result  : PASS
+==========================================================================
+test_adult_registers_without_a_guardian (tests.test_guardian_rule.GuardianRuleTests.test_adult_registers_without_a_guardian)
+A player aged 18 or over registers in their own right. ... ok
+test_age_is_judged_on_the_completion_date (tests.test_guardian_rule.GuardianRuleTests.test_age_is_judged_on_the_completion_date)
+A player who turns 18 the day before completing needs no guardian. ... ok
+test_amend_to_complete_cannot_bypass_the_rule (tests.test_guardian_rule.GuardianRuleTests.test_amend_to_complete_cannot_bypass_the_rule)
+Changing the status through amend must still enforce the rule. ... ok
+test_junior_with_a_guardian_completes (tests.test_guardian_rule.GuardianRuleTests.test_junior_with_a_guardian_completes) ... ok
+test_junior_without_guardian_is_refused_with_a_reason (tests.test_guardian_rule.GuardianRuleTests.test_junior_without_guardian_is_refused_with_a_reason)
+A junior with no linked guardian cannot be completed. ... ok
+test_last_guardian_cannot_be_removed_from_a_registered_junior (tests.test_guardian_rule.GuardianRuleTests.test_last_guardian_cannot_be_removed_from_a_registered_junior) ... ok
+test_one_guardian_can_serve_several_juniors (tests.test_guardian_rule.GuardianRuleTests.test_one_guardian_can_serve_several_juniors)
+A single guardian linked to siblings satisfies the rule for both. ... ok
+test_refused_registration_is_left_started_and_records_the_reason (tests.test_guardian_rule.GuardianRuleTests.test_refused_registration_is_left_started_and_records_the_reason)
+A refusal must not silently lose the registrar's work. ... ok
+test_seeded_walk_in_case_is_blocked (tests.test_guardian_rule.GuardianRuleTests.test_seeded_walk_in_case_is_blocked)
+The seeded Tyler Brennan case demonstrates the rule on a fresh install. ... ok
+test_updating_a_guardian_updates_every_linked_child (tests.test_guardian_rule.GuardianRuleTests.test_updating_a_guardian_updates_every_linked_child)
+The sync requirement: one edit, all children's contacts change. ... ok
+test_a_member_cannot_register_twice_in_one_season (tests.test_guardian_rule.RegistrationLifecycleTests.test_a_member_cannot_register_twice_in_one_season) ... ok
+test_inactive_member_cannot_start_a_registration (tests.test_guardian_rule.RegistrationLifecycleTests.test_inactive_member_cannot_start_a_registration) ... ok
+test_invalid_season_is_rejected (tests.test_guardian_rule.RegistrationLifecycleTests.test_invalid_season_is_rejected) ... ok
+test_registration_history_lists_every_season (tests.test_guardian_rule.RegistrationLifecycleTests.test_registration_history_lists_every_season) ... ok
+test_season_summary_counts_only_completed_registrations (tests.test_guardian_rule.RegistrationLifecycleTests.test_season_summary_counts_only_completed_registrations) ... ok
+test_status_flow_started_complete_withdrawn (tests.test_guardian_rule.RegistrationLifecycleTests.test_status_flow_started_complete_withdrawn) ... ok
+test_withdrawn_registration_cannot_be_completed (tests.test_guardian_rule.RegistrationLifecycleTests.test_withdrawn_registration_cannot_be_completed) ... ok
+test_create_requires_a_contact_method (tests.test_guardian_service.GuardianCrudTests.test_create_requires_a_contact_method) ... ok
+test_guardian_can_be_linked_to_many_juniors (tests.test_guardian_service.GuardianCrudTests.test_guardian_can_be_linked_to_many_juniors) ... ok
+test_has_guardian_reflects_the_link_table (tests.test_guardian_service.GuardianCrudTests.test_has_guardian_reflects_the_link_table) ... ok
+test_link_is_idempotent (tests.test_guardian_service.GuardianCrudTests.test_link_is_idempotent) ... ok
+test_link_rejects_unknown_records (tests.test_guardian_service.GuardianCrudTests.test_link_rejects_unknown_records) ... ok
+test_primary_link_is_reported_first (tests.test_guardian_service.GuardianCrudTests.test_primary_link_is_reported_first) ... ok
+test_relationship_must_be_known (tests.test_guardian_service.GuardianCrudTests.test_relationship_must_be_known) ... ok
+test_search_guardians_by_name (tests.test_guardian_service.GuardianCrudTests.test_search_guardians_by_name) ... ok
+test_unlink_guardian_from_a_different_member_does_nothing (tests.test_guardian_service.GuardianCrudTests.test_unlink_guardian_from_a_different_member_does_nothing)
+Unlinking a guardian who is not linked must not raise or corrupt data. ... ok
+test_unlink_last_guardian_of_unregistered_junior_is_allowed (tests.test_guardian_service.GuardianCrudTests.test_unlink_last_guardian_of_unregistered_junior_is_allowed)
+The protection applies to registered juniors, not to every junior. ... ok
+test_unlink_rejects_unknown_member (tests.test_guardian_service.GuardianCrudTests.test_unlink_rejects_unknown_member) ... ok
+test_update_cannot_remove_the_last_contact_method (tests.test_guardian_service.GuardianCrudTests.test_update_cannot_remove_the_last_contact_method) ... ok
+test_update_syncs_to_every_linked_child (tests.test_guardian_service.GuardianCrudTests.test_update_syncs_to_every_linked_child) ... ok
+test_relinking_restores_a_removed_guardian (tests.test_guardian_service.GuardianDependencyTests.test_relinking_restores_a_removed_guardian)
+Removing a link and adding it back must leave exactly one link. ... ok
+test_removing_the_last_guardian_of_a_registered_junior_is_refused (tests.test_guardian_service.GuardianDependencyTests.test_removing_the_last_guardian_of_a_registered_junior_is_refused)
+The compliance protection, exercised through the same entry point. ... ok
+test_age_group_is_suggested_from_the_date_of_birth (tests.test_member_service.MemberCrudTests.test_age_group_is_suggested_from_the_date_of_birth) ... ok
+test_create_read_update_deactivate (tests.test_member_service.MemberCrudTests.test_create_read_update_deactivate) ... ok
+test_deactivate_is_recorded_in_the_audit_log (tests.test_member_service.MemberCrudTests.test_deactivate_is_recorded_in_the_audit_log) ... ok
+test_member_count_excludes_inactive_members (tests.test_member_service.MemberCrudTests.test_member_count_excludes_inactive_members) ... ok
+test_same_name_players_are_distinguishable (tests.test_member_service.MemberCrudTests.test_same_name_players_are_distinguishable)
+The same-name requirement: results carry date of birth and id. ... ok
+test_search_matches_first_or_last_name (tests.test_member_service.MemberCrudTests.test_search_matches_first_or_last_name) ... ok
+test_search_with_no_match_returns_an_empty_list (tests.test_member_service.MemberCrudTests.test_search_with_no_match_returns_an_empty_list) ... ok
+test_updating_a_missing_member_is_rejected (tests.test_member_service.MemberCrudTests.test_updating_a_missing_member_is_rejected) ... ok
+test_validation_rejects_bad_input (tests.test_member_service.MemberCrudTests.test_validation_rejects_bad_input) ... ok
+test_deactivated_member_keeps_registration_history (tests.test_member_service.MemberRelationshipTests.test_deactivated_member_keeps_registration_history)
+Soft delete exists so history survives; prove it does. ... ok
+test_inactive_member_cannot_be_given_a_new_guardian_link (tests.test_member_service.MemberRelationshipTests.test_inactive_member_cannot_be_given_a_new_guardian_link) ... ok
+test_add_move_remove_player (tests.test_team_service.TeamCrudTests.test_add_move_remove_player) ... ok
+test_add_player_rejects_unknown_records (tests.test_team_service.TeamCrudTests.test_add_player_rejects_unknown_records) ... ok
+test_create_team_and_reject_a_duplicate (tests.test_team_service.TeamCrudTests.test_create_team_and_reject_a_duplicate) ... ok
+test_create_team_validates_its_input (tests.test_team_service.TeamCrudTests.test_create_team_validates_its_input) ... ok
+test_move_between_seasons_is_refused (tests.test_team_service.TeamCrudTests.test_move_between_seasons_is_refused) ... ok
+test_move_requires_the_player_to_be_in_the_source_team (tests.test_team_service.TeamCrudTests.test_move_requires_the_player_to_be_in_the_source_team) ... ok
+test_move_to_the_same_team_is_rejected (tests.test_team_service.TeamCrudTests.test_move_to_the_same_team_is_rejected) ... ok
+test_only_a_completed_registration_can_be_placed_in_a_team (tests.test_team_service.TeamCrudTests.test_only_a_completed_registration_can_be_placed_in_a_team)
+The second genuine business rule: no roster places for unregistered players. ... ok
+test_roster_reports_contact_gaps (tests.test_team_service.TeamCrudTests.test_roster_reports_contact_gaps)
+A junior on a roster with no guardian contact is reported, not hidden. ... ok
+test_roster_shows_a_guardian_contact_for_a_junior (tests.test_team_service.TeamCrudTests.test_roster_shows_a_guardian_contact_for_a_junior)
+The club's headline reporting requirement. ... ok
+test_team_roster_is_empty_for_a_new_team (tests.test_team_service.TeamCrudTests.test_team_roster_is_empty_for_a_new_team) ... ok
+test_completing_a_junior_registration_without_a_guardian_is_refused (tests.test_web_app.GuardianRuleThroughTheWebTests.test_completing_a_junior_registration_without_a_guardian_is_refused) ... ok
+test_create_guardian_then_link_then_view (tests.test_web_app.GuardianRuleThroughTheWebTests.test_create_guardian_then_link_then_view) ... ok
+test_create_team_and_place_a_registered_player (tests.test_web_app.GuardianRuleThroughTheWebTests.test_create_team_and_place_a_registered_player) ... ok
+test_deactivate_then_reactivate_through_forms (tests.test_web_app.GuardianRuleThroughTheWebTests.test_deactivate_then_reactivate_through_forms) ... ok
+test_invalid_member_form_shows_a_helpful_error (tests.test_web_app.GuardianRuleThroughTheWebTests.test_invalid_member_form_shows_a_helpful_error) ... ok
+test_seeded_junior_with_a_guardian_can_be_completed_over_http (tests.test_web_app.GuardianRuleThroughTheWebTests.test_seeded_junior_with_a_guardian_can_be_completed_over_http)
+Complete a registration after linking a guardian, entirely over HTTP. ... ok
+test_withdraw_a_registration_through_the_form (tests.test_web_app.GuardianRuleThroughTheWebTests.test_withdraw_a_registration_through_the_form)
+Withdrawal is available whatever state the seeded case is in. ... ok
+test_detail_pages_render (tests.test_web_app.PageSmokeTests.test_detail_pages_render) ... ok
+test_health_endpoint_reports_configuration_and_rules (tests.test_web_app.PageSmokeTests.test_health_endpoint_reports_configuration_and_rules) ... ok
+test_pages_render (tests.test_web_app.PageSmokeTests.test_pages_render) ... ok
+test_path_traversal_outside_static_is_refused (tests.test_web_app.PageSmokeTests.test_path_traversal_outside_static_is_refused) ... ok
+test_stylesheet_is_served (tests.test_web_app.PageSmokeTests.test_stylesheet_is_served) ... ok
+test_unknown_member_is_handled_gracefully (tests.test_web_app.PageSmokeTests.test_unknown_member_is_handled_gracefully) ... ok
+
+----------------------------------------------------------------------
+Ran 67 tests in 2.323s
+
+OK

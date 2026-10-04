@@ -11,12 +11,26 @@ find the corresponding merge commit.
 ## [Unreleased]
 
 ### Fixed
+- `static/styles.css`: the file opened with `#` comment lines, which are Markdown
+  syntax rather than CSS. They were invalid tokens that caused the `:root` rule to
+  be discarded, so every `var(--brand)`, `var(--accent)` and related custom
+  property resolved to nothing. The visible effect was that the club header, the
+  main navigation and every card had no background colour. The comments are now
+  valid CSS comments, and the stylesheet contains no non-ASCII bytes.
+- `app.py`: sixteen placeholder values were written as HTML entities (`&mdash;`)
+  and then passed through the escaping helper, which escaped the ampersand so the
+  page displayed the literal text. They are now the real characters. The same
+  correction removes a literal `&middot;` from the team page subtitle.
 - `README.md`: repaired non-ASCII characters (the em dashes and the directory-tree
   diagram) that a text-editor roundtrip had corrupted. The file was rewritten as
   UTF-8 and the damaged characters restored.
 
 ### Added
 - `docs/DEPLOYMENT.md`: configuration and deployment guide.
+- `scripts/run_tests_for_evidence.py`: writes a clean transcript of the test run
+  to `docs/test-evidence.txt`, so the evidence is the program's own output rather
+  than a screenshot of a shell.
+- `docs/test-evidence.txt`: the transcript produced by that script.
 
 ## [1.3.0] - 2026-09-28 — release/1.3.0
 

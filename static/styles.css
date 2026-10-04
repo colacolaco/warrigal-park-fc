@@ -1,9 +1,9 @@
-# ===========================================================================
-# Warrigal Park FC — stylesheet
-# Layout density follows the club's real usage: the registrar works through
-# hundreds of records on a laptop, and the junior coordinator reads rosters on
-# a phone at the ground.
-# ===========================================================================
+/* ===========================================================================
+   Warrigal Park FC - stylesheet
+   Layout density follows the club's real usage: the registrar works through
+   hundreds of records on a laptop, and the junior coordinator reads rosters on
+   a phone at the ground.
+   =========================================================================== */
 
 :root {
   --brand: #7A1F2B;

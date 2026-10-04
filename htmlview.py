@@ -66,7 +66,7 @@ def layout(
   <div class="inner">
     <div class="crest">WPFC</div>
     <div>
-      <h1>{esc(THEME['club_name'])} &mdash; {esc(THEME['system_name'])}</h1>
+      <h1>{esc(THEME['club_name'])} — {esc(THEME['system_name'])}</h1>
       <p class="sub">Season {esc(THEME['season'])} &middot; replacing the 43-column Excel master spreadsheet</p>
     </div>
     <span class="env-badge">env: {esc(environment)}</span>

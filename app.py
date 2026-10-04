@@ -126,9 +126,9 @@ def dashboard(req: Request) -> str:
             ["Active members", f'<span class="num">{len(members)}</span>', "players on the club register"],
             ["Guardian records", f'<span class="num">{len(guardians)}</span>', "adult contacts"],
             ["Registrations, season " + str(season), f'<span class="num">{len(registrations)}</span>', "all statuses"],
-            ["&nbsp;&nbsp;&mdash; complete", f'<span class="num">{len(complete)}</span>', "player is cleared to play"],
-            ["&nbsp;&nbsp;&mdash; started", f'<span class="num">{len(started)}</span>', "waiting on guardian paperwork"],
-            ["&nbsp;&nbsp;&mdash; withdrawn", f'<span class="num">{len(withdrawn)}</span>', "not registering this season"],
+            ["  — complete", f'<span class="num">{len(complete)}</span>', "player is cleared to play"],
+            ["  — started", f'<span class="num">{len(started)}</span>', "waiting on guardian paperwork"],
+            ["  — withdrawn", f'<span class="num">{len(withdrawn)}</span>', "not registering this season"],
             ["Teams created", f'<span class="num">{len(teams)}</span>', "for season " + str(season)],
         ],
     )
@@ -154,7 +154,7 @@ def dashboard(req: Request) -> str:
             hv.rule_callout(
                 "These players are <strong>under 18 with no linked guardian</strong>. "
                 "They must be given a guardian record before their registration can "
-                "be completed &mdash; the system will refuse completion and tell you why."
+                "be completed — the system will refuse completion and tell you why."
             )
             + hv.table(["Player", "Age", "Age group", "Status"], rows),
         )
@@ -209,7 +209,7 @@ def members_list(req: Request) -> str:
                 member["date_of_birth"],
                 f'<span class="num">{member["age"]}</span>',
                 hv.esc(member["suggested_age_group"]),
-                hv.esc(member["phone"] or member["email"] or "&mdash;"),
+                hv.esc(member["phone"] or member["email"] or "—"),
                 hv.badge("Active", THEME["success"]) if member["is_active"]
                 else hv.badge("Inactive", THEME["text_muted"]),
                 hv.link(f"/members/{member['id']}", "Open", "button tiny secondary"),
@@ -283,11 +283,11 @@ def member_detail(req: Request, member_id: str) -> str:
             ["Age", f'<span class="num">{member["age"]}</span>'],
             ["Suggested age group", hv.esc(member["suggested_age_group"])],
             ["Gender", hv.esc(member["gender"])],
-            ["Phone", hv.esc(member["phone"] or "&mdash;")],
-            ["Email", hv.esc(member["email"] or "&mdash;")],
+            ["Phone", hv.esc(member["phone"] or "—")],
+            ["Email", hv.esc(member["email"] or "—")],
             ["Status", hv.badge("Active", THEME["success"]) if member["is_active"]
              else hv.badge("Inactive", THEME["text_muted"])],
-            ["Under 18", "Yes &mdash; a guardian is required to complete registration"
+            ["Under 18", "Yes — a guardian is required to complete registration"
              if member["age"] < 18 else "No"],
             ["Created", hv.esc(member["created_at"])],
             ["Last updated", hv.esc(member["updated_at"])],
@@ -298,7 +298,7 @@ def member_detail(req: Request, member_id: str) -> str:
         [
             hv.link(f"/guardians/{g['id']}", g["full_name"]),
             hv.esc(g["relationship"]),
-            hv.esc(g["phone"] or g["email"] or "&mdash;"),
+            hv.esc(g["phone"] or g["email"] or "—"),
             "Yes" if g.get("is_primary") else "No",
             '<form method="post" action="/guardians/unlink" class="actions">'
             + hv.hidden("member_id", member["id"])
@@ -318,7 +318,7 @@ def member_detail(req: Request, member_id: str) -> str:
         '<form method="post" action="/guardians/link" class="inline-form">'
         + hv.hidden("member_id", member["id"])
         + hv.field("guardian_id", "Link an existing guardian", "",
-                   options=[("", "&mdash; choose a guardian &mdash;")] + linkable,
+                   options=[("", "— choose a guardian —")] + linkable,
                    hint="or create a new guardian on the Guardians page")
         + '<button type="submit">Link guardian</button></form>'
     ) if linkable else hv.empty_state(
@@ -331,7 +331,7 @@ def member_detail(req: Request, member_id: str) -> str:
             str(r["season"]),
             hv.esc(r["age_group"]),
             hv.status_badge(r["status"]),
-            hv.esc(r["refusal_reason"] or "&mdash;"),
+            hv.esc(r["refusal_reason"] or "—"),
             hv.link(f"/registrations/{r['id']}", "Open", "button tiny secondary"),
         ]
         for r in history
@@ -379,7 +379,7 @@ def member_detail(req: Request, member_id: str) -> str:
     body = (
         hv.page_title(member["full_name"], f"member id {member['id']}")
         + '<p class="page-help">'
-        + hv.link("/members", "&larr; back to the member register")
+        + hv.link("/members", "← back to the member register")
         + "</p>"
         + hv.card("Profile", profile)
         + f'<div class="grid-2">'
@@ -442,9 +442,9 @@ def guardians_list(req: Request) -> str:
                 str(guardian["id"]),
                 hv.link(f"/guardians/{guardian['id']}", guardian["full_name"]),
                 hv.esc(guardian["relationship"]),
-                hv.esc(guardian["phone"] or guardian["email"] or "&mdash;"),
+                hv.esc(guardian["phone"] or guardian["email"] or "—"),
                 f'<span class="num">{len(children)}</span>',
-                hv.esc(", ".join(c["full_name"] for c in children) or "&mdash;"),
+                hv.esc(", ".join(c["full_name"] for c in children) or "—"),
             ]
         )
 
@@ -513,7 +513,7 @@ def guardian_detail(req: Request, guardian_id: str) -> str:
         '<form method="post" action="/guardians/link" class="inline-form">'
         + hv.hidden("guardian_id", guardian["id"])
         + hv.field("member_id", "Link this guardian to a member", "",
-                   options=[("", "&mdash; choose a member &mdash;")]
+                   options=[("", "— choose a member —")]
                    + [(str(m["id"]), f"{m['full_name']} ({m['date_of_birth']})")
                       for m in unlinked])
         + '<button type="submit">Link member</button></form>'
@@ -539,14 +539,14 @@ def guardian_detail(req: Request, guardian_id: str) -> str:
 
     body = (
         hv.page_title(guardian["full_name"], f"guardian id {guardian['id']}")
-        + '<p class="page-help">' + hv.link("/guardians", "&larr; back to the guardian register") + "</p>"
+        + '<p class="page-help">' + hv.link("/guardians", "← back to the guardian register") + "</p>"
         + hv.card("Contact details", hv.table(
             ["Field", "Value"],
             [["Guardian id", str(guardian["id"])],
              ["Name", hv.esc(guardian["full_name"])],
              ["Relationship", hv.esc(guardian["relationship"])],
-             ["Phone", hv.esc(guardian["phone"] or "&mdash;")],
-             ["Email", hv.esc(guardian["email"] or "&mdash;")],
+             ["Phone", hv.esc(guardian["phone"] or "—")],
+             ["Email", hv.esc(guardian["email"] or "—")],
              ["Linked juniors", f'<span class="num">{len(children)}</span>'],
              ["Last updated", hv.esc(guardian["updated_at"])]]))
         + f'<div class="grid-2">'
@@ -614,7 +614,7 @@ def registrations_list(req: Request) -> str:
                 f'<span class="num">{r["age_at_registration"]}</span>',
                 hv.esc(r["age_group"]),
                 hv.status_badge(r["status"]),
-                hv.esc(r["refusal_reason"] or "&mdash;"),
+                hv.esc(r["refusal_reason"] or "—"),
                 hv.link(f"/registrations/{r['id']}", "Open", "button tiny secondary"),
             ]
         )
@@ -707,7 +707,7 @@ def registration_detail(req: Request, registration_id: str) -> str:
             ["Status", hv.status_badge(registration["status"])],
             ["Created", hv.esc(registration["created_at"])],
             ["Last updated", hv.esc(registration["updated_at"])],
-            ["Note", hv.esc(registration["refusal_reason"] or "&mdash;")],
+            ["Note", hv.esc(registration["refusal_reason"] or "—")],
         ],
     )
 
@@ -745,7 +745,7 @@ def registration_detail(req: Request, registration_id: str) -> str:
     guardian_block = hv.table(
         ["Guardian", "Relationship", "Contact"],
         [[hv.link(f"/guardians/{g['id']}", g["full_name"]), hv.esc(g["relationship"]),
-          hv.esc(g["phone"] or g["email"] or "&mdash;")] for g in guardians],
+          hv.esc(g["phone"] or g["email"] or "—")] for g in guardians],
     ) if guardians else hv.empty_state(
         "No guardian is linked to this player."
     )
@@ -767,7 +767,7 @@ def registration_detail(req: Request, registration_id: str) -> str:
 
     body = (
         hv.page_title(f"Registration {registration['id']}", registration["member_name"] if registration.get("member_name") else "")
-        + '<p class="page-help">' + hv.link("/registrations", "&larr; back to registrations") + "</p>"
+        + '<p class="page-help">' + hv.link("/registrations", "← back to registrations") + "</p>"
         + rule_block
         + hv.card("Registration", detail)
         + f'<div class="grid-2">'
@@ -865,13 +865,13 @@ def team_detail(req: Request, team_id: str) -> str:
         return _not_found(req, f"Team {team_id} does not exist")
 
     roster_rows = [
-        [hv.esc(player["squad_number"] or "&mdash;"),
+        [hv.esc(player["squad_number"] or "—"),
          hv.link(f"/members/{player['id']}", player["full_name"]),
          f'<span class="num">{player["age"]}</span>',
          hv.badge("Under 18", THEME["brand_primary"]) if player["is_minor"]
          else hv.badge("18+", THEME["text_muted"]),
-         hv.esc(player["contact"] or "&mdash;"),
-         hv.esc(player["contact_for"] or "&mdash;"),
+         hv.esc(player["contact"] or "—"),
+         hv.esc(player["contact_for"] or "—"),
          '<form method="post" action="/teams/remove" class="actions">'
          + hv.hidden("team_id", team["id"])
          + hv.hidden("member_id", player["id"])
@@ -888,7 +888,7 @@ def team_detail(req: Request, team_id: str) -> str:
         '<form method="post" action="/teams/add" class="inline-form">'
         + hv.hidden("team_id", team["id"])
         + hv.field("member_id", "Add a registered player", "",
-                   options=[("", "&mdash; choose a player &mdash;")]
+                   options=[("", "— choose a player —")]
                    + [(str(r["member_id"]),
                        f"{r['member_name']} ({r['age_group']}, reg {r['id']})")
                       for r in eligible],
@@ -905,10 +905,10 @@ def team_detail(req: Request, team_id: str) -> str:
         '<form method="post" action="/teams/move" class="inline-form">'
         + hv.hidden("from_team_id", team["id"])
         + hv.field("member_id", "Move a player from this team", "",
-                   options=[("", "&mdash; choose a player &mdash;")]
+                   options=[("", "— choose a player —")]
                    + [(str(p["id"]), p["full_name"]) for p in team["roster"]])
         + hv.field("to_team_id", "To team", "",
-                   options=[("", "&mdash; choose a team &mdash;")]
+                   options=[("", "— choose a team —")]
                    + [(str(t["id"]), f"{t['name']} ({t['age_group']})")
                       for t in other_teams])
         + '<button type="submit">Move player</button></form>'
@@ -926,8 +926,8 @@ def team_detail(req: Request, team_id: str) -> str:
     ) if gaps else '<p class="page-help">Every player on this roster has a contact number.</p>'
 
     body = (
-        hv.page_title(team["name"], f"{team['age_group']} &middot; season {team['season']}")
-        + '<p class="page-help">' + hv.link("/teams", "&larr; back to teams") + "</p>"
+        hv.page_title(team["name"], f"{team['age_group']} \u00b7 season {team['season']}")
+        + '<p class="page-help">' + hv.link("/teams", "← back to teams") + "</p>"
         + hv.card("Roster with contacts",
                   hv.table(["No.", "Player", "Age", "Category", "Contact",
                             "Contact is", ""], roster_rows,
@@ -993,15 +993,15 @@ def views_index(req: Request) -> str:
                 hv.link(f"/teams/{team['id']}", team["name"]),
                 hv.esc(team["age_group"]),
                 hv.link(f"/members/{player['id']}", player["full_name"]),
-                hv.esc(player["contact"] or "&mdash;"),
-                hv.esc(player["contact_for"] or "&mdash;"),
+                hv.esc(player["contact"] or "—"),
+                hv.esc(player["contact_for"] or "—"),
             ])
 
     guardians = gs.find_guardians(db)
     guardian_rows = [
         [hv.link(f"/guardians/{g['id']}", g["full_name"]),
          hv.esc(", ".join(f"{c['full_name']} ({c['age']})" for c in g["linked_children"])
-                or "&mdash;"),
+                or "—"),
          f'<span class="num">{g["linked_count"]}</span>']
         for g in guardians
     ]
@@ -1012,11 +1012,11 @@ def views_index(req: Request) -> str:
         history = rs.registration_history(db, member["id"])
         history_rows.append([
             hv.link(f"/members/{member['id']}", member["full_name"]),
-            " &rarr; ".join(
+            " → ".join(
                 f"{r['season']}: {r['age_group']} "
                 f"<span style=\"color:{THEME['text_muted']}\">({r['status']})</span>"
                 for r in history
-            ) or "&mdash;",
+            ) or "—",
             f'<span class="num">{len(history)}</span>',
         ])
 
@@ -1027,12 +1027,12 @@ def views_index(req: Request) -> str:
             "contact for every player, a member's registration history, and the "
             "juniors linked to a guardian."
         )
-        + hv.card("View 1 &mdash; team roster with a contact for each player",
+        + hv.card("View 1 — team roster with a contact for each player",
                   hv.table(["Team", "Age group", "Player", "Contact",
                             "Contact belongs to"], roster_rows))
-        + hv.card("View 2 &mdash; the juniors linked to a guardian",
+        + hv.card("View 2 — the juniors linked to a guardian",
                   hv.table(["Guardian", "Linked players", "Count"], guardian_rows))
-        + hv.card("View 3 &mdash; a member's registration history",
+        + hv.card("View 3 — a member's registration history",
                   hv.table(["Member", "Registration history", "Records"], history_rows))
     )
     return hv.layout("Views", body, active="/views",
@@ -1184,7 +1184,7 @@ class ClubRequestHandler(BaseHTTPRequestHandler):
             hv.page_title(heading)
             + hv.rule_callout(f"<strong>{hv.esc(message)}</strong>")
             + f'<p class="page-help">{hv.esc(explanation)}</p>'
-            + f'<p class="page-help">{hv.link(request.path, "&larr; go back")}</p>'
+            + f'<p class="page-help">{hv.link(request.path, "← go back")}</p>'
         )
         html = hv.layout(heading, body, active=request.path, notice=notice,
                          environment=request.settings.env)
