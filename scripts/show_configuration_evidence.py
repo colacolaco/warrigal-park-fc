@@ -44,6 +44,18 @@ def heading(text: str) -> None:
     print("=" * 74)
 
 
+def scrub(text: str) -> str:
+    """Remove absolute paths so the evidence describes the project, not the machine.
+
+    Any output that reaches the transcript goes through this. Git in particular
+    prints absolute paths for a branch or a working directory, and those would
+    otherwise record the directory the project happened to be checked out into.
+    """
+    text = text.replace(str(PROJECT_ROOT), ".")
+    text = text.replace(str(PROJECT_ROOT).replace("\\", "/"), ".")
+    return text
+
+
 def run_git(*args: str) -> str:
     """Run a git command and return its output, or a note when unavailable."""
     try:
@@ -57,8 +69,8 @@ def run_git(*args: str) -> str:
     except (OSError, subprocess.SubprocessError) as exc:
         return f"<git unavailable: {exc}>"
     if result.returncode != 0:
-        return f"<git {' '.join(args)} failed: {result.stderr.strip()}>"
-    return result.stdout.rstrip()
+        return scrub(f"<git {' '.join(args)} failed: {result.stderr.strip()}>")
+    return scrub(result.stdout.rstrip())
 
 
 def summarise(settings) -> str:
@@ -255,10 +267,9 @@ def main() -> int:
     document.write_text(json.dumps(collected, indent=2, default=str), encoding="utf-8")
 
     heading("Evidence written")
-    print(f"  {document}")
+    print(f"  {document.relative_to(PROJECT_ROOT)}  (relative to the repository root)")
     print()
-    print("  Take a screenshot of the output above for the report, and keep this")
-    print("  JSON file as machine-readable proof that the commands were run.")
+    print("  Keep this JSON file as machine-readable proof that the checks ran.")
     return 0
 
 

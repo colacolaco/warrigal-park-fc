@@ -3,13 +3,13 @@
   Configuration management evidence
 ============================================================================
   python  : 3.13.1
-  run at  : 2026-10-04 10:25:54 UTC
+  run at  : 2026-10-04 10:32:53 UTC
   command : python scripts/write_configuration_evidence.py
   result  : completed
 ============================================================================
 ==========================================================================
   Warrigal Park FC - configuration management evidence
-  generated 2026-10-04 10:25 UTC
+  generated 2026-10-04 10:32 UTC
   python   3.13.1 on Windows
   project  warrigal-park-fc/ (repository root)
 ==========================================================================
@@ -61,7 +61,8 @@
 ==========================================================================
   4. Version-control history on this checkout
 ==========================================================================
-* 3a8c801 (HEAD -> main, origin/main, origin/HEAD) fix(views): repair the stylesheet and two escaping faults in the page layer
+* 2925acc (HEAD -> main, origin/main, origin/HEAD) chore: add reproducible text transcripts for the report evidence
+* 3a8c801 fix(views): repair the stylesheet and two escaping faults in the page layer
 * f5ac4bd config(deploy): make the push resilient to a blocked github.com address
 * ade4920 config(deploy): detect and work around an unreachable github.com
 *   16b691a Merge release/1.3.0: README character repair
@@ -100,9 +101,7 @@
 | * ed129ec docs: add the change log
 |/  
 *   5adea07 (tag: v1.2.0) Merge release/1.2.0: season registration and the under-18 guardian rule
-|\  
-| *   24bb054 (origin/release/1.2.0, release/1.2.0) Merge feature/US-007-registration-lifecycle into release/1.2.0
-| |\
+|\
 
   Branches:
     feature/US-001-project-skeleton
@@ -168,15 +167,15 @@
     refused: Registration refused: Talia Osei is under 18 (age 10 on 2026-10-04) and has no linked guardian. Link a parent or guardian record, then complete the registration again.
 
   Audit trail written to the database by the services:
-    2026-10-04 10:25:54  system         seed         loaded fictitious sample data for 2026
-    2026-10-04 10:25:54  member         create       Talia Osei
-    2026-10-04 10:25:54  registration   start        season 2026 U10
-    2026-10-04 10:25:54  registration   refuse       Registration refused: Talia Osei is under 18 (age 10
-    2026-10-04 10:25:54  guardian       create       Ada Osei
-    2026-10-04 10:25:54  member_guardian link         guardian 10 linked to member 16
-    2026-10-04 10:25:54  registration   complete     age 10 on 2026-10-04, group U10
-    2026-10-04 10:25:54  team           create       U10 Mixed U10 season 2026
-    2026-10-04 10:25:54  team_member    add          member 16 -> team 6
+    2026-10-04 10:32:54  system         seed         loaded fictitious sample data for 2026
+    2026-10-04 10:32:54  member         create       Talia Osei
+    2026-10-04 10:32:54  registration   start        season 2026 U10
+    2026-10-04 10:32:54  registration   refuse       Registration refused: Talia Osei is under 18 (age 10
+    2026-10-04 10:32:54  guardian       create       Ada Osei
+    2026-10-04 10:32:54  member_guardian link         guardian 10 linked to member 16
+    2026-10-04 10:32:54  registration   complete     age 10 on 2026-10-04, group U10
+    2026-10-04 10:32:54  team           create       U10 Mixed U10 season 2026
+    2026-10-04 10:32:54  team_member    add          member 16 -> team 6
 
   Roster view (the club's headline reporting requirement):
     #8   Talia Osei         age 10  contact 0412 345 678 (Ada Osei)
@@ -184,7 +183,6 @@
 ==========================================================================
   Evidence written
 ==========================================================================
-  C:\Users\HP\Desktop\MSD课程（王龙）\warrigal-park-fc\docs\configuration-evidence.json
+  docs\configuration-evidence.json  (relative to the repository root)
 
-  Take a screenshot of the output above for the report, and keep this
-  JSON file as machine-readable proof that the commands were run.
+  Keep this JSON file as machine-readable proof that the checks ran.
